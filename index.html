@@ -1,0 +1,6398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profile Search Website</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:"Poppins",sans-serif;
+}
+
+:root{
+    --primary:#1877f2;
+    --primary-dark:#0d65d9;
+    --bg:#f0f2f5;
+    --card:#ffffff;
+    --text:#1c1e21;
+    --muted:#65676b;
+    --border:#dddfe2;
+    --danger:#e53935;
+    --success:#31a24c;
+    --warning:#f59e0b;
+    --purple:#7c3aed;
+    --shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+body.dark{
+    --bg:#18191a;
+    --card:#242526;
+    --text:#e4e6eb;
+    --muted:#b0b3b8;
+    --border:#3a3b3c;
+    --shadow:0 8px 30px rgba(0,0,0,.35);
+}
+
+body{
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    transition:.25s;
+}
+
+button,input,select{
+    font-family:inherit;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+}
+
+img{
+    max-width:100%;
+}
+
+
+/* =========================
+   SPLASH
+========================= */
+
+#splash{
+    position:fixed;
+    inset:0;
+    background:var(--primary);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+    transition:.6s;
+}
+
+#splash.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.splash-logo{
+    width:115px;
+    height:115px;
+    border-radius:50%;
+    background:white;
+    padding:10px;
+    object-fit:contain;
+    animation:pop .8s ease;
+}
+
+@keyframes pop{
+    0%{
+        transform:scale(.2);
+        opacity:0;
+    }
+
+    60%{
+        transform:scale(1.12);
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-card{
+    width:100%;
+    max-width:430px;
+    background:var(--card);
+    border-radius:22px;
+    padding:38px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+.login-logo{
+    width:95px;
+    height:95px;
+    display:block;
+    margin:0 auto 16px;
+    object-fit:contain;
+    border-radius:50%;
+}
+
+.login-title{
+    text-align:center;
+    font-size:27px;
+    font-weight:700;
+}
+
+.login-subtitle{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:5px 0 28px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    outline:none;
+    background:var(--card);
+    color:var(--text);
+}
+
+input:focus,
+select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(24,119,242,.10);
+}
+
+.password-wrapper{
+    position:relative;
+}
+
+.password-wrapper input{
+    padding-right:45px;
+}
+
+.eye-btn{
+    position:absolute;
+    right:5px;
+    top:50%;
+    transform:translateY(-50%);
+    background:transparent;
+    color:var(--muted);
+    width:35px;
+    height:35px;
+    border-radius:50%;
+}
+
+.eye-btn:hover{
+    background:var(--bg);
+}
+
+.primary-btn{
+    background:var(--primary);
+    color:white;
+    padding:11px 17px;
+    border-radius:9px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.primary-btn:hover{
+    background:var(--primary-dark);
+}
+
+.secondary-btn{
+    background:var(--bg);
+    color:var(--text);
+    padding:11px 17px;
+    border-radius:9px;
+    font-weight:600;
+}
+
+.secondary-btn:hover{
+    background:var(--border);
+}
+
+.success-btn{
+    background:var(--success);
+    color:white;
+    padding:11px 17px;
+    border-radius:9px;
+    font-weight:600;
+}
+
+.warning-btn{
+    background:var(--warning);
+    color:white;
+    padding:11px 17px;
+    border-radius:9px;
+    font-weight:600;
+}
+
+.danger-btn{
+    background:var(--danger);
+    color:white;
+    padding:11px 17px;
+    border-radius:9px;
+    font-weight:600;
+}
+
+.purple-btn{
+    background:var(--purple);
+    color:white;
+    padding:11px 17px;
+    border-radius:9px;
+    font-weight:600;
+}
+
+.full{
+    width:100%;
+}
+
+.login-note{
+    margin-top:18px;
+    padding:13px;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+    text-align:center;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+#app{
+    display:none;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    min-height:68px;
+    padding:10px 25px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+    font-weight:700;
+}
+
+.brand-logo{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    border-radius:50%;
+}
+
+.nav-actions{
+    display:flex;
+    gap:7px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:var(--bg);
+    color:var(--text);
+    font-size:17px;
+}
+
+.icon-btn:hover{
+    background:var(--border);
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.container{
+    width:min(1250px,94%);
+    margin:28px auto;
+}
+
+.welcome{
+    margin-bottom:22px;
+}
+
+.welcome h1{
+    font-size:28px;
+}
+
+.welcome p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.stat-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    box-shadow:0 3px 15px rgba(0,0,0,.04);
+}
+
+.stat-icon{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    background:var(--bg);
+}
+
+.stat-number{
+    font-size:25px;
+    font-weight:700;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:11px;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:15px;
+    border-radius:16px;
+    margin-bottom:18px;
+}
+
+.search-row{
+    display:flex;
+    gap:10px;
+}
+
+.search-input{
+    flex:1;
+}
+
+.filter-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:12px;
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.tab{
+    padding:11px 20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--text);
+    font-weight:600;
+}
+
+.tab.active{
+    background:var(--primary);
+    color:white;
+    border-color:var(--primary);
+}
+
+
+/* =========================
+   PROFILE GRID
+========================= */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(285px,1fr));
+    gap:18px;
+}
+
+.profile-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    transition:.2s;
+    overflow:hidden;
+}
+
+.profile-card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow);
+}
+
+.profile-head{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    margin-bottom:15px;
+}
+
+.avatar{
+    width:68px;
+    height:68px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:var(--primary);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    font-weight:600;
+    overflow:hidden;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.profile-card h3{
+    font-size:17px;
+    word-break:break-word;
+}
+
+.role{
+    color:var(--primary);
+    font-size:10px;
+    font-weight:700;
+    margin-top:3px;
+}
+
+.profile-info{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.9;
+}
+
+.info-row{
+    display:flex;
+    gap:5px;
+}
+
+.profile-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:15px;
+}
+
+.profile-buttons button{
+    flex:1;
+    min-width:65px;
+    padding:9px 6px;
+    font-size:10px;
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:600;
+}
+
+.badge.assigned{
+    background:rgba(49,162,76,.12);
+    color:var(--success);
+}
+
+.badge.unassigned{
+    background:rgba(245,158,11,.12);
+    color:var(--warning);
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    grid-column:1/-1;
+    text-align:center;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:55px 20px;
+    color:var(--muted);
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    background:rgba(0,0,0,.62);
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-content{
+    width:min(720px,100%);
+    max-height:92vh;
+    overflow-y:auto;
+    background:var(--card);
+    border-radius:18px;
+    padding:25px;
+    border:1px solid var(--border);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.modal-header h2{
+    font-size:21px;
+}
+
+.close-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--bg);
+    color:var(--text);
+    font-size:22px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:8px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+
+/* =========================
+   PHOTO UPLOAD
+========================= */
+
+.photo-upload{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.photo-preview{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--border);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    margin-bottom:10px;
+    color:var(--muted);
+    font-size:12px;
+    text-align:center;
+}
+
+.photo-preview img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.file-label{
+    background:var(--primary);
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    font-size:11px;
+    cursor:pointer;
+}
+
+#photoInput{
+    display:none;
+}
+
+
+/* =========================
+   PROFILE VIEW
+========================= */
+
+.view-top{
+    text-align:center;
+    padding-bottom:20px;
+}
+
+.view-avatar{
+    width:100px;
+    height:100px;
+    margin:0 auto 12px;
+    border-radius:50%;
+    background:var(--primary);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    font-weight:600;
+    overflow:hidden;
+}
+
+.view-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.view-top h2{
+    font-size:23px;
+}
+
+.view-top p{
+    color:var(--primary);
+    font-weight:600;
+    font-size:12px;
+}
+
+.details{
+    border-top:1px solid var(--border);
+}
+
+.detail{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+.detail-label{
+    color:var(--muted);
+    font-weight:600;
+}
+
+.detail-value{
+    text-align:right;
+    word-break:break-word;
+}
+
+
+/* =========================
+   TEACHER LEARNERS
+========================= */
+
+.teacher-summary{
+    background:var(--bg);
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+.teacher-summary h3{
+    font-size:16px;
+}
+
+.teacher-summary p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+.learner-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.learner-item{
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.learner-item strong{
+    font-size:12px;
+}
+
+.learner-item small{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+}
+
+
+/* =========================
+   SETTINGS DRAWER
+========================= */
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.35);
+    z-index:3999;
+}
+
+.overlay.show{
+    display:block;
+}
+
+.drawer{
+    position:fixed;
+    top:0;
+    right:-400px;
+    width:380px;
+    max-width:92%;
+    height:100vh;
+    background:var(--card);
+    z-index:4000;
+    padding:25px;
+    transition:.3s;
+    overflow-y:auto;
+    box-shadow:-7px 0 25px rgba(0,0,0,.2);
+}
+
+.drawer.open{
+    right:0;
+}
+
+.drawer-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.setting{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:16px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.setting h3{
+    font-size:14px;
+}
+
+.setting p{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+}
+
+.setting-buttons{
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.danger-zone{
+    margin-top:25px;
+    padding:15px;
+    border:1px solid rgba(229,57,53,.3);
+    border-radius:12px;
+}
+
+
+/* =========================
+   ACTIVITY LOG
+========================= */
+
+.activity-list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.activity-item{
+    border:1px solid var(--border);
+    padding:12px;
+    border-radius:10px;
+}
+
+.activity-item strong{
+    font-size:12px;
+}
+
+.activity-item small{
+    display:block;
+    color:var(--muted);
+    font-size:9px;
+    margin-top:3px;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translate(-50%,100px);
+    background:#222;
+    color:white;
+    padding:12px 20px;
+    border-radius:10px;
+    z-index:10000;
+    opacity:0;
+    transition:.3s;
+    font-size:12px;
+    text-align:center;
+    max-width:90%;
+}
+
+#toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .filter-row{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:650px){
+
+    .navbar{
+        padding:8px 13px;
+    }
+
+    .brand span{
+        display:none;
+    }
+
+    .container{
+        width:92%;
+    }
+
+    .welcome h1{
+        font-size:23px;
+    }
+
+    .search-row{
+        flex-direction:column;
+    }
+
+    .filter-row{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:13px;
+    }
+
+    .stat-icon{
+        width:42px;
+        height:42px;
+        font-size:19px;
+    }
+
+    .stat-number{
+        font-size:20px;
+    }
+
+    .tabs{
+        overflow-x:auto;
+    }
+
+    .tab{
+        white-space:nowrap;
+    }
+
+    .profile-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail{
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .detail-value{
+        text-align:left;
+    }
+
+}
+
+
+/* =========================
+   PRINT
+========================= */
+
+@media print{
+
+    body{
+        background:white;
+    }
+
+    .navbar,
+    .search-card,
+    .tabs,
+    .profile-buttons,
+    .stats-grid{
+        display:none !important;
+    }
+
+    .container{
+        width:100%;
+        margin:0;
+    }
+
+    .profile-card{
+        break-inside:avoid;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     SPLASH
+========================= -->
+
+<div id="splash">
+
+    <img
+        src="https://www.pngmart.com/files/23/Profile-PNG-File.png"
+        class="splash-logo"
+        alt="School Logo"
+    >
+
+</div>
+
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<section id="loginPage">
+
+    <div class="login-card">
+
+        <img
+            src="https://scontent.fceb2-1.fna.fbcdn.net/v/t39.30808-1/292518852_405502268264538_784002126336697130_n.jpg?stp=dst-jpg_tt6&cstp=mx1136x1136&ctp=s200x200&_nc_cat=101&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=2d3e12&_nc_eui2=AeH2UNf1gHJyOPcdVMU_GyHkIKnlnB9xFWkgqeWcH3EVaaxMRhdBjIvxhPXPGaFn3n-OqcVcv-P0X3MKS2O7g-YE&_nc_ohc=RyigPfG7zUwQ7kNvwEyJXB9&_nc_oc=AdoeikD8O5Wjk0-SpCzfTO6Dzan4ICjJ0e9EjiaY38e37LUVezI4yEMYMXuplD-vDJ0&_nc_zt=24&_nc_ht=scontent.fceb2-1.fna&_nc_gid=6s0nYnOuq4GXZfIQD2BB9Q&_nc_ss=7b2a8&oh=00_AQKoqtdNyDmEEm79GqH0j1TMgjWESWnt7YNcFI5y05gung&oe=6AB328E8"
+            class="login-logo"
+            alt="School Logo"
+        >
+
+        <h1 class="login-title">
+            PROFILE SEARCH WEBSITE
+        </h1>
+
+        <p class="login-subtitle">
+            Teachers & Learners Profile
+        </p>
+
+        <div class="input-group">
+
+            <label>Username</label>
+
+            <input
+                type="text"
+                id="loginUsername"
+                placeholder="Enter username"
+                autocomplete="username"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Password</label>
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                >
+
+                <button
+                    class="eye-btn"
+                    onclick="togglePassword('loginPassword')"
+                >
+                    👁
+                </button>
+
+            </div>
+
+        </div>
+
+        <button
+            class="primary-btn full"
+            onclick="login()"
+        >
+            Log In
+        </button>
+
+        <div class="login-note">
+
+            🔒 Authorized Profile Search System
+
+            <br>
+
+            Username and password are required.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     APPLICATION
+========================= -->
+
+<div id="app">
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <img
+                src="https://scontent.fceb2-1.fna.fbcdn.net/v/t39.30808-1/292518852_405502268264538_784002126336697130_n.jpg?stp=dst-jpg_tt6&cstp=mx1136x1136&ctp=s200x200&_nc_cat=101&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=2d3e12&_nc_eui2=AeH2UNf1gHJyOPcdVMU_GyHkIKnlnB9xFWkgqeWcH3EVaaxMRhdBjIvxhPXPGaFn3n-OqcVcv-P0X3MKS2O7g-YE&_nc_ohc=RyigPfG7zUwQ7kNvwEyJXB9&_nc_oc=AdoeikD8O5Wjk0-SpCzfTO6Dzan4ICjJ0e9EjiaY38e37LUVezI4yEMYMXuplD-vDJ0&_nc_zt=24&_nc_ht=scontent.fceb2-1.fna&_nc_gid=6s0nYnOuq4GXZfIQD2BB9Q&_nc_ss=7b2a8&oh=00_AQKoqtdNyDmEEm79GqH0j1TMgjWESWnt7YNcFI5y05gung&oe=6AB328E8"
+                class="brand-logo"
+                alt="Logo"
+            >
+
+            <span>
+                ALIMODIAN NATIONAL COMPREHENSIVE HIGH SCHOOL  
+            </span>
+
+        </div>
+
+        <div class="nav-actions">
+
+            <button
+                class="icon-btn"
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+            <button
+                class="icon-btn"
+                onclick="openActivityLog()"
+                title="Activity Log"
+            >
+                📝
+            </button>
+
+            <button
+                class="icon-btn"
+                onclick="openSettings()"
+                title="Settings"
+            >
+                ⚙️
+            </button>
+
+            <button
+                class="icon-btn"
+                onclick="logout()"
+                title="Logout"
+            >
+                ↪️
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="welcome">
+
+            <h1>
+                Profile Dashboard
+            </h1>
+
+            <p id="welcomeText">
+                Welcome
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================= -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👨‍🏫
+                </div>
+
+                <div>
+                    <div
+                        class="stat-number"
+                        id="totalTeachers"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Total Teachers
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🎓
+                </div>
+
+                <div>
+                    <div
+                        class="stat-number"
+                        id="totalLearners"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Total Learners
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+                    <div
+                        class="stat-number"
+                        id="assignedLearners"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Assigned Learners
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⚠️
+                </div>
+
+                <div>
+                    <div
+                        class="stat-number"
+                        id="unassignedLearners"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Unassigned Learners
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             SEARCH
+        ========================= -->
+
+        <div class="search-card">
+
+            <div class="search-row">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search name, section, year, LRN, school..."
+                    oninput="renderProfiles()"
+                >
+
+                <button
+                    class="primary-btn"
+                    onclick="openAddProfile()"
+                >
+                    + Add Profile
+                </button>
+
+            </div>
+
+
+            <div class="filter-row">
+
+                <select
+                    id="sectionFilter"
+                    onchange="renderProfiles()"
+                >
+                    <option value="">
+                        All Sections
+                    </option>
+                </select>
+
+
+                <select
+                    id="yearFilter"
+                    onchange="renderProfiles()"
+                >
+                    <option value="">
+                        All Years
+                    </option>
+                </select>
+
+
+                <select
+                    id="teacherFilter"
+                    onchange="renderProfiles()"
+                >
+                    <option value="">
+                        All Teachers
+                    </option>
+                </select>
+
+
+                <select
+                    id="assignmentFilter"
+                    onchange="renderProfiles()"
+                >
+                    <option value="">
+                        All Learners
+                    </option>
+
+                    <option value="assigned">
+                        Assigned
+                    </option>
+
+                    <option value="unassigned">
+                        Unassigned
+                    </option>
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             TABS
+        ========================= -->
+
+        <div class="tabs">
+
+            <button
+                id="teacherTab"
+                class="tab active"
+                onclick="changeTab('teacher')"
+            >
+                👨‍🏫 Teachers
+            </button>
+
+            <button
+                id="learnerTab"
+                class="tab"
+                onclick="changeTab('learner')"
+            >
+                🎓 Learners
+            </button>
+
+        </div>
+
+
+        <div
+            id="profileGrid"
+            class="profile-grid"
+        ></div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     ADD / EDIT MODAL
+========================= -->
+
+<div
+    id="profileModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="profileModalTitle">
+                Add Profile
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('profileModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- PHOTO -->
+
+        <div class="photo-upload">
+
+            <div
+                id="photoPreview"
+                class="photo-preview"
+            >
+                No Photo
+            </div>
+
+            <label
+                for="photoInput"
+                class="file-label"
+            >
+                📷 Choose Photo
+            </label>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/*"
+                onchange="previewPhoto(event)"
+            >
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <div class="input-group">
+
+                <label>
+                    Profile Type
+                </label>
+
+                <select id="profileType">
+
+                    <option value="teacher">
+                        Teacher
+                    </option>
+
+                    <option value="learner">
+                        Learner
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Name *
+                </label>
+
+                <input
+                    id="name"
+                    placeholder="Full name"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Section
+                </label>
+
+                <input
+                    id="section"
+                    placeholder="Section"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Year / Grade
+                </label>
+
+                <input
+                    id="year"
+                    placeholder="Example: Grade 12"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Emergency Number
+                </label>
+
+                <input
+                    id="emergency"
+                    placeholder="Emergency number"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    LRN Number
+                </label>
+
+                <input
+                    id="lrn"
+                    placeholder="LRN number"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    School
+                </label>
+
+                <input
+                    id="school"
+                    placeholder="School"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Age
+                </label>
+
+                <input
+                    type="number"
+                    id="age"
+                    placeholder="Age"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email"
+                >
+
+            </div>
+
+
+            <div
+                class="input-group"
+                id="teacherField"
+            >
+
+                <label>
+                    Assigned Teacher
+                </label>
+
+                <select id="teacherId">
+
+                    <option value="">
+                        No teacher assigned
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="input-group"
+                style="grid-column:1/-1"
+            >
+
+                <label>
+                    Additional Information
+                </label>
+
+                <input
+                    id="notes"
+                    placeholder="Optional information"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="primary-btn"
+                onclick="saveProfile()"
+            >
+                Save Profile
+            </button>
+
+            <button
+                class="secondary-btn"
+                onclick="closeModal('profileModal')"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     VIEW PROFILE MODAL
+========================= -->
+
+<div
+    id="viewModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Profile
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('viewModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="viewContent"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TEACHER LEARNERS MODAL
+========================= -->
+
+<div
+    id="teacherLearnersModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Assigned Learners
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('teacherLearnersModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="teacherLearnersContent"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     PASSWORD MODAL
+========================= -->
+
+<div
+    id="passwordModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Change Password
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('passwordModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>
+                Current Password
+            </label>
+
+            <input
+                type="password"
+                id="currentPassword"
+                placeholder="Current password"
+            >
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>
+                New Password
+            </label>
+
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="New password"
+            >
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>
+                Confirm New Password
+            </label>
+
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm new password"
+            >
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="primary-btn"
+                onclick="changePassword()"
+            >
+                Change Password
+            </button>
+
+            <button
+                class="secondary-btn"
+                onclick="closeModal('passwordModal')"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ACTIVITY LOG MODAL
+========================= -->
+
+<div
+    id="activityModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Activity History
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('activityModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="activityList"
+            class="activity-list"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SETTINGS
+========================= -->
+
+<div
+    id="overlay"
+    class="overlay"
+    onclick="closeSettings()"
+></div>
+
+
+<aside
+    id="drawer"
+    class="drawer"
+>
+
+    <div class="drawer-header">
+
+        <h2>
+            Settings
+        </h2>
+
+        <button
+            class="close-btn"
+            onclick="closeSettings()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                🌙 Dark Mode
+            </h3>
+
+            <p>
+                Change website appearance.
+            </p>
+
+        </div>
+
+        <button
+            class="secondary-btn"
+            onclick="toggleDarkMode()"
+        >
+            Toggle
+        </button>
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                🔐 Change Password
+            </h3>
+
+            <p>
+                Change your login password.
+            </p>
+
+        </div>
+
+        <button
+            class="secondary-btn"
+            onclick="openPasswordModal()"
+        >
+            Change
+        </button>
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                📤 Export Data
+            </h3>
+
+            <p>
+                Download profile records.
+            </p>
+
+        </div>
+
+        <div class="setting-buttons">
+
+            <button
+                class="success-btn"
+                onclick="exportAllLearners()"
+            >
+                Learners
+            </button>
+
+            <button
+                class="purple-btn"
+                onclick="exportAllProfiles()"
+            >
+                All
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                📥 Import CSV
+            </h3>
+
+            <p>
+                Add profiles from a CSV file.
+            </p>
+
+        </div>
+
+        <label
+            for="csvInput"
+            class="primary-btn"
+            style="cursor:pointer;font-size:11px"
+        >
+            Import
+        </label>
+
+        <input
+            type="file"
+            id="csvInput"
+            accept=".csv,text/csv"
+            style="display:none"
+            onchange="importCSV(event)"
+        >
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                💾 Backup
+            </h3>
+
+            <p>
+                Save all website data.
+            </p>
+
+        </div>
+
+        <button
+            class="success-btn"
+            onclick="backupData()"
+        >
+            Backup
+        </button>
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                ♻️ Restore
+            </h3>
+
+            <p>
+                Restore a previous backup.
+            </p>
+
+        </div>
+
+        <label
+            for="restoreInput"
+            class="warning-btn"
+            style="cursor:pointer;font-size:11px"
+        >
+            Restore
+        </label>
+
+        <input
+            type="file"
+            id="restoreInput"
+            accept=".json,application/json"
+            style="display:none"
+            onchange="restoreData(event)"
+        >
+
+    </div>
+
+
+    <div class="setting">
+
+        <div>
+
+            <h3>
+                👤 Current Account
+            </h3>
+
+            <p id="accountName">
+                Username
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="danger-zone">
+
+        <h3 style="font-size:14px">
+            ⚠️ Data Management
+        </h3>
+
+        <p
+            style="
+                color:var(--muted);
+                font-size:10px;
+                line-height:1.6;
+                margin:6px 0 12px;
+            "
+        >
+            Clear all profiles from this browser.
+            This cannot be undone unless you have a backup.
+        </p>
+
+        <button
+            class="danger-btn"
+            onclick="clearAllProfiles()"
+        >
+            Clear All Profiles
+        </button>
+
+    </div>
+
+
+    <div
+        style="
+            margin-top:25px;
+            padding:15px;
+            border-radius:12px;
+            background:var(--bg);
+            color:var(--muted);
+            font-size:10px;
+            line-height:1.7;
+        "
+    >
+
+        <strong style="color:var(--text)">
+            Profile Search Website
+        </strong>
+
+        <br><br>
+
+        Prototype data is stored locally in this browser.
+
+        <br><br>
+
+        Regularly create a backup to prevent accidental data loss.
+
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+const PROFILE_KEY =
+    "profile_search_profiles_v2";
+
+const ACCOUNT_KEY =
+    "profile_search_account_v2";
+
+const SESSION_KEY =
+    "profile_search_logged_in_v2";
+
+const DARK_KEY =
+    "profile_search_dark_mode_v2";
+
+const ACTIVITY_KEY =
+    "profile_search_activity_v2";
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let profiles = [];
+
+let currentTab = "teacher";
+
+let editingId = null;
+
+let currentPhoto = "";
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    initialize
+);
+
+
+function initialize(){
+
+    loadDarkMode();
+
+    loadProfiles();
+
+    checkAccount();
+
+    loadFilters();
+
+    updateStatistics();
+
+    setTimeout(
+        () => {
+
+            const splash =
+                document.getElementById("splash");
+
+            if(splash){
+                splash.classList.add("hide");
+            }
+
+        },
+        1300
+    );
+
+}
+
+
+/* =====================================================
+   ACCOUNT
+===================================================== */
+
+function checkAccount(){
+
+    let account =
+        localStorage.getItem(
+            ACCOUNT_KEY
+        );
+
+
+    if(!account){
+
+        account = {
+
+            username:"admin",
+
+            password:"admin123"
+
+        };
+
+
+        localStorage.setItem(
+
+            ACCOUNT_KEY,
+
+            JSON.stringify(account)
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login(){
+
+    const username =
+        document
+            .getElementById(
+                "loginUsername"
+            )
+            .value
+            .trim();
+
+
+    const password =
+        document
+            .getElementById(
+                "loginPassword"
+            )
+            .value;
+
+
+    if(!username || !password){
+
+        showToast(
+            "Please enter username and password."
+        );
+
+        return;
+
+    }
+
+
+    const account =
+        JSON.parse(
+            localStorage.getItem(
+                ACCOUNT_KEY
+            )
+        );
+
+
+    if(
+        username === account.username &&
+        password === account.password
+    ){
+
+        localStorage.setItem(
+            SESSION_KEY,
+            "true"
+        );
+
+
+        showApplication(username);
+
+        addActivity(
+            "User logged in"
+        );
+
+        showToast(
+            "Login successful."
+        );
+
+    }
+
+    else{
+
+        showToast(
+            "Incorrect username or password."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW APPLICATION
+===================================================== */
+
+function showApplication(username){
+
+    document
+        .getElementById(
+            "loginPage"
+        )
+        .style
+        .display = "none";
+
+
+    document
+        .getElementById(
+            "app"
+        )
+        .style
+        .display = "block";
+
+
+    document
+        .getElementById(
+            "welcomeText"
+        )
+        .textContent =
+            "Welcome, " + username;
+
+
+    document
+        .getElementById(
+            "accountName"
+        )
+        .textContent =
+            "Username: " + username;
+
+
+    loadFilters();
+
+    renderProfiles();
+
+    updateStatistics();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        SESSION_KEY
+    );
+
+
+    document
+        .getElementById(
+            "app"
+        )
+        .style
+        .display = "none";
+
+
+    document
+        .getElementById(
+            "loginPage"
+        )
+        .style
+        .display = "flex";
+
+
+    document
+        .getElementById(
+            "loginPassword"
+        )
+        .value = "";
+
+
+    showToast(
+        "You have been logged out."
+    );
+
+}
+
+
+/* =====================================================
+   PASSWORD
+===================================================== */
+
+function changePassword(){
+
+    const current =
+        document
+            .getElementById(
+                "currentPassword"
+            )
+            .value;
+
+
+    const newPassword =
+        document
+            .getElementById(
+                "newPassword"
+            )
+            .value;
+
+
+    const confirm =
+        document
+            .getElementById(
+                "confirmPassword"
+            )
+            .value;
+
+
+    const account =
+        JSON.parse(
+            localStorage.getItem(
+                ACCOUNT_KEY
+            )
+        );
+
+
+    if(
+        current !==
+        account.password
+    ){
+
+        showToast(
+            "Current password is incorrect."
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword.length < 6){
+
+        showToast(
+            "New password must be at least 6 characters."
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword !== confirm){
+
+        showToast(
+            "New passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    account.password =
+        newPassword;
+
+
+    localStorage.setItem(
+
+        ACCOUNT_KEY,
+
+        JSON.stringify(account)
+
+    );
+
+
+    addActivity(
+        "Password changed"
+    );
+
+
+    closeModal(
+        "passwordModal"
+    );
+
+
+    document
+        .getElementById(
+            "currentPassword"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "newPassword"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "confirmPassword"
+        )
+        .value = "";
+
+
+    showToast(
+        "Password changed successfully."
+    );
+
+}
+
+
+/* =====================================================
+   PROFILE STORAGE
+===================================================== */
+
+function loadProfiles(){
+
+    const saved =
+        localStorage.getItem(
+            PROFILE_KEY
+        );
+
+
+    if(saved){
+
+        try{
+
+            profiles =
+                JSON.parse(saved);
+
+        }
+
+        catch{
+
+            profiles = [];
+
+        }
+
+    }
+
+}
+
+
+function saveProfiles(){
+
+    localStorage.setItem(
+
+        PROFILE_KEY,
+
+        JSON.stringify(profiles)
+
+    );
+
+}
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+function updateStatistics(){
+
+    const teachers =
+        profiles.filter(
+            p =>
+                p.type === "teacher"
+        ).length;
+
+
+    const learners =
+        profiles.filter(
+            p =>
+                p.type === "learner"
+        );
+
+
+    const assigned =
+        learners.filter(
+            p =>
+                p.teacherId
+        ).length;
+
+
+    const unassigned =
+        learners.length -
+        assigned;
+
+
+    document
+        .getElementById(
+            "totalTeachers"
+        )
+        .textContent =
+            teachers;
+
+
+    document
+        .getElementById(
+            "totalLearners"
+        )
+        .textContent =
+            learners.length;
+
+
+    document
+        .getElementById(
+            "assignedLearners"
+        )
+        .textContent =
+            assigned;
+
+
+    document
+        .getElementById(
+            "unassignedLearners"
+        )
+        .textContent =
+            unassigned;
+
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+function loadFilters(){
+
+    const sectionFilter =
+        document.getElementById(
+            "sectionFilter"
+        );
+
+
+    const yearFilter =
+        document.getElementById(
+            "yearFilter"
+        );
+
+
+    const teacherFilter =
+        document.getElementById(
+            "teacherFilter"
+        );
+
+
+    if(!sectionFilter){
+
+        return;
+
+    }
+
+
+    const oldSection =
+        sectionFilter.value;
+
+
+    const oldYear =
+        yearFilter.value;
+
+
+    const oldTeacher =
+        teacherFilter.value;
+
+
+    const sections =
+        [...new Set(
+            profiles
+                .map(p => p.section)
+                .filter(Boolean)
+        )]
+        .sort();
+
+
+    const years =
+        [...new Set(
+            profiles
+                .map(p => p.year)
+                .filter(Boolean)
+        )]
+        .sort();
+
+
+    const teachers =
+        profiles
+            .filter(
+                p =>
+                    p.type === "teacher"
+            )
+            .sort(
+                (a,b) =>
+                    (a.name || "")
+                    .localeCompare(
+                        b.name || ""
+                    )
+            );
+
+
+    sectionFilter.innerHTML =
+        `<option value="">All Sections</option>`;
+
+
+    sections.forEach(
+        section => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                section;
+
+            option.textContent =
+                section;
+
+            sectionFilter.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    yearFilter.innerHTML =
+        `<option value="">All Years</option>`;
+
+
+    years.forEach(
+        year => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                year;
+
+            option.textContent =
+                year;
+
+            yearFilter.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    teacherFilter.innerHTML =
+        `<option value="">All Teachers</option>`;
+
+
+    teachers.forEach(
+        teacher => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                teacher.id;
+
+            option.textContent =
+                teacher.name;
+
+            teacherFilter.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    sectionFilter.value =
+        oldSection;
+
+
+    yearFilter.value =
+        oldYear;
+
+
+    teacherFilter.value =
+        oldTeacher;
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderProfiles(){
+
+    const grid =
+        document.getElementById(
+            "profileGrid"
+        );
+
+
+    if(!grid){
+
+        return;
+
+    }
+
+
+    const search =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const section =
+        document
+            .getElementById(
+                "sectionFilter"
+            )
+            .value;
+
+
+    const year =
+        document
+            .getElementById(
+                "yearFilter"
+            )
+            .value;
+
+
+    const teacherId =
+        document
+            .getElementById(
+                "teacherFilter"
+            )
+            .value;
+
+
+    const assignment =
+        document
+            .getElementById(
+                "assignmentFilter"
+            )
+            .value;
+
+
+    const filtered =
+        profiles.filter(
+            profile => {
+
+                if(
+                    profile.type !==
+                    currentTab
+                ){
+
+                    return false;
+
+                }
+
+
+                const text = `
+
+                    ${profile.name || ""}
+
+                    ${profile.section || ""}
+
+                    ${profile.year || ""}
+
+                    ${profile.emergency || ""}
+
+                    ${profile.lrn || ""}
+
+                    ${profile.school || ""}
+
+                    ${profile.age || ""}
+
+                    ${profile.email || ""}
+
+                    ${profile.notes || ""}
+
+                `.toLowerCase();
+
+
+                if(
+                    search &&
+                    !text.includes(search)
+                ){
+
+                    return false;
+
+                }
+
+
+                if(
+                    section &&
+                    profile.section !== section
+                ){
+
+                    return false;
+
+                }
+
+
+                if(
+                    year &&
+                    profile.year !== year
+                ){
+
+                    return false;
+
+                }
+
+
+                if(
+                    currentTab === "learner"
+                ){
+
+                    if(
+                        teacherId &&
+                        profile.teacherId !== teacherId
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    if(
+                        assignment === "assigned" &&
+                        !profile.teacherId
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    if(
+                        assignment === "unassigned" &&
+                        profile.teacherId
+                    ){
+
+                        return false;
+
+                    }
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    if(!filtered.length){
+
+        grid.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    No profiles found
+                </h3>
+
+                <p>
+                    Try another search or filter.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    grid.innerHTML =
+        filtered
+            .map(
+                profile =>
+                    createCard(profile)
+            )
+            .join("");
+
+}
+
+
+/* =====================================================
+   PROFILE CARD
+===================================================== */
+
+function createCard(profile){
+
+    const firstLetter =
+        (profile.name || "?")
+            .charAt(0)
+            .toUpperCase();
+
+
+    let teacherName =
+        "Not assigned";
+
+
+    if(
+        profile.type === "learner" &&
+        profile.teacherId
+    ){
+
+        const teacher =
+            profiles.find(
+                p =>
+                    p.id ===
+                    profile.teacherId
+            );
+
+
+        if(teacher){
+
+            teacherName =
+                teacher.name;
+
+        }
+
+    }
+
+
+    const avatar =
+        profile.photo
+
+        ?
+
+        `<img
+            src="${profile.photo}"
+            alt="Profile Photo"
+        >`
+
+        :
+
+        escapeHTML(firstLetter);
+
+
+    let assignmentBadge = "";
+
+
+    if(profile.type === "learner"){
+
+        assignmentBadge =
+            profile.teacherId
+
+            ?
+
+            `<span class="badge assigned">
+                ✓ Assigned
+            </span>`
+
+            :
+
+            `<span class="badge unassigned">
+                ⚠ Unassigned
+            </span>`;
+
+    }
+
+
+    return `
+
+        <div class="profile-card">
+
+            <div class="profile-head">
+
+                <div class="avatar">
+
+                    ${avatar}
+
+                </div>
+
+                <div>
+
+                    <h3>
+                        ${escapeHTML(
+                            profile.name ||
+                            "Unnamed"
+                        )}
+                    </h3>
+
+                    <div class="role">
+
+                        ${
+                            profile.type === "teacher"
+                            ? "TEACHER"
+                            : "LEARNER"
+                        }
+
+                    </div>
+
+                    ${assignmentBadge}
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-info">
+
+                <div class="info-row">
+                    📚
+                    <span>
+                        Section:
+                        ${escapeHTML(
+                            profile.section ||
+                            "N/A"
+                        )}
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    🎓
+                    <span>
+                        Year:
+                        ${escapeHTML(
+                            profile.year ||
+                            "N/A"
+                        )}
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    🏫
+                    <span>
+                        School:
+                        ${escapeHTML(
+                            profile.school ||
+                            "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                ${
+                    profile.type === "learner"
+
+                    ?
+
+                    `<div class="info-row">
+                        👨‍🏫
+                        <span>
+                            Teacher:
+                            ${escapeHTML(
+                                teacherName
+                            )}
+                        </span>
+                    </div>`
+
+                    : ""
+
+                }
+
+            </div>
+
+
+            <div class="profile-buttons">
+
+                <button
+                    class="primary-btn"
+                    onclick="viewProfile('${profile.id}')"
+                >
+                    View
+                </button>
+
+
+                <button
+                    class="secondary-btn"
+                    onclick="editProfile('${profile.id}')"
+                >
+                    Edit
+                </button>
+
+
+                ${
+                    profile.type === "teacher"
+
+                    ?
+
+                    `<button
+                        class="purple-btn"
+                        onclick="viewTeacherLearners('${profile.id}')"
+                    >
+                        Learners
+                    </button>`
+
+                    : ""
+
+                }
+
+
+                ${
+                    profile.type === "teacher"
+
+                    ?
+
+                    `<button
+                        class="success-btn"
+                        onclick="exportTeacherLearners('${profile.id}')"
+                    >
+                        Export
+                    </button>`
+
+                    : ""
+
+                }
+
+
+                <button
+                    class="danger-btn"
+                    onclick="deleteProfile('${profile.id}')"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   TAB
+===================================================== */
+
+function changeTab(tab){
+
+    currentTab = tab;
+
+
+    document
+        .getElementById(
+            "teacherTab"
+        )
+        .classList
+        .toggle(
+            "active",
+            tab === "teacher"
+        );
+
+
+    document
+        .getElementById(
+            "learnerTab"
+        )
+        .classList
+        .toggle(
+            "active",
+            tab === "learner"
+        );
+
+
+    document
+        .getElementById(
+            "assignmentFilter"
+        )
+        .style
+        .display =
+            tab === "learner"
+            ? "block"
+            : "none";
+
+
+    renderProfiles();
+
+}
+
+
+/* =====================================================
+   ADD PROFILE
+===================================================== */
+
+function openAddProfile(){
+
+    editingId = null;
+
+    currentPhoto = "";
+
+
+    document
+        .getElementById(
+            "profileModalTitle"
+        )
+        .textContent =
+            "Add Profile";
+
+
+    clearForm();
+
+
+    document
+        .getElementById(
+            "profileType"
+        )
+        .value =
+            currentTab;
+
+
+    loadTeacherOptions();
+
+    updateTeacherField();
+
+    updatePhotoPreview();
+
+
+    openModal(
+        "profileModal"
+    );
+
+}
+
+
+/* =====================================================
+   SAVE PROFILE
+===================================================== */
+
+function saveProfile(){
+
+    const profile = {
+
+        id:
+            editingId ||
+            Date.now().toString(),
+
+        type:
+            document
+                .getElementById(
+                    "profileType"
+                )
+                .value,
+
+        name:
+            document
+                .getElementById(
+                    "name"
+                )
+                .value
+                .trim(),
+
+        section:
+            document
+                .getElementById(
+                    "section"
+                )
+                .value
+                .trim(),
+
+        year:
+            document
+                .getElementById(
+                    "year"
+                )
+                .value
+                .trim(),
+
+        emergency:
+            document
+                .getElementById(
+                    "emergency"
+                )
+                .value
+                .trim(),
+
+        lrn:
+            document
+                .getElementById(
+                    "lrn"
+                )
+                .value
+                .trim(),
+
+        school:
+            document
+                .getElementById(
+                    "school"
+                )
+                .value
+                .trim(),
+
+        age:
+            document
+                .getElementById(
+                    "age"
+                )
+                .value
+                .trim(),
+
+        email:
+            document
+                .getElementById(
+                    "email"
+                )
+                .value
+                .trim(),
+
+        teacherId:
+            document
+                .getElementById(
+                    "teacherId"
+                )
+                .value,
+
+        notes:
+            document
+                .getElementById(
+                    "notes"
+                )
+                .value
+                .trim(),
+
+        photo:
+            currentPhoto,
+
+        updatedAt:
+            new Date().toISOString()
+
+    };
+
+
+    if(!profile.name){
+
+        showToast(
+            "Please enter the profile name."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        profile.type === "teacher"
+    ){
+
+        profile.teacherId = "";
+
+    }
+
+
+    if(editingId){
+
+        const index =
+            profiles.findIndex(
+                p =>
+                    p.id ===
+                    editingId
+            );
+
+
+        if(index !== -1){
+
+            profiles[index] =
+                profile;
+
+        }
+
+
+        addActivity(
+            `Updated profile: ${profile.name}`
+        );
+
+
+        showToast(
+            "Profile updated successfully."
+        );
+
+    }
+
+    else{
+
+        profile.createdAt =
+            new Date()
+                .toISOString();
+
+
+        profiles.push(
+            profile
+        );
+
+
+        addActivity(
+            `Added profile: ${profile.name}`
+        );
+
+
+        showToast(
+            "Profile published successfully."
+        );
+
+    }
+
+
+    saveProfiles();
+
+    loadFilters();
+
+    updateStatistics();
+
+    closeModal(
+        "profileModal"
+    );
+
+    renderProfiles();
+
+}
+
+
+/* =====================================================
+   EDIT PROFILE
+===================================================== */
+
+function editProfile(id){
+
+    const profile =
+        profiles.find(
+            p =>
+                p.id === id
+        );
+
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    editingId = id;
+
+    currentPhoto =
+        profile.photo || "";
+
+
+    document
+        .getElementById(
+            "profileModalTitle"
+        )
+        .textContent =
+            "Edit Profile";
+
+
+    document
+        .getElementById(
+            "profileType"
+        )
+        .value =
+            profile.type;
+
+
+    document
+        .getElementById(
+            "name"
+        )
+        .value =
+            profile.name || "";
+
+
+    document
+        .getElementById(
+            "section"
+        )
+        .value =
+            profile.section || "";
+
+
+    document
+        .getElementById(
+            "year"
+        )
+        .value =
+            profile.year || "";
+
+
+    document
+        .getElementById(
+            "emergency"
+        )
+        .value =
+            profile.emergency || "";
+
+
+    document
+        .getElementById(
+            "lrn"
+        )
+        .value =
+            profile.lrn || "";
+
+
+    document
+        .getElementById(
+            "school"
+        )
+        .value =
+            profile.school || "";
+
+
+    document
+        .getElementById(
+            "age"
+        )
+        .value =
+            profile.age || "";
+
+
+    document
+        .getElementById(
+            "email"
+        )
+        .value =
+            profile.email || "";
+
+
+    document
+        .getElementById(
+            "notes"
+        )
+        .value =
+            profile.notes || "";
+
+
+    loadTeacherOptions();
+
+
+    document
+        .getElementById(
+            "teacherId"
+        )
+        .value =
+            profile.teacherId || "";
+
+
+    updateTeacherField();
+
+    updatePhotoPreview();
+
+
+    openModal(
+        "profileModal"
+    );
+
+}
+
+
+/* =====================================================
+   TEACHER OPTIONS
+===================================================== */
+
+function loadTeacherOptions(){
+
+    const select =
+        document.getElementById(
+            "teacherId"
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            No teacher assigned
+        </option>
+
+    `;
+
+
+    profiles
+
+        .filter(
+            p =>
+                p.type === "teacher"
+        )
+
+        .sort(
+            (a,b) =>
+                (a.name || "")
+                .localeCompare(
+                    b.name || ""
+                )
+        )
+
+        .forEach(
+            teacher => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    teacher.id;
+
+
+                option.textContent =
+                    teacher.name;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
+
+
+document
+    .getElementById(
+        "profileType"
+    )
+    .addEventListener(
+        "change",
+        updateTeacherField
+    );
+
+
+function updateTeacherField(){
+
+    const type =
+        document
+            .getElementById(
+                "profileType"
+            )
+            .value;
+
+
+    document
+        .getElementById(
+            "teacherField"
+        )
+        .style
+        .display =
+            type === "learner"
+            ? "block"
+            : "none";
+
+}
+
+
+/* =====================================================
+   PHOTO
+===================================================== */
+
+function previewPhoto(event){
+
+    const file =
+        event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    if(file.size > 2 * 1024 * 1024){
+
+        showToast(
+            "Photo must be smaller than 2 MB."
+        );
+
+        event.target.value = "";
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e){
+
+            currentPhoto =
+                e.target.result;
+
+            updatePhotoPreview();
+
+        };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function updatePhotoPreview(){
+
+    const preview =
+        document.getElementById(
+            "photoPreview"
+        );
+
+
+    if(currentPhoto){
+
+        preview.innerHTML = `
+
+            <img
+                src="${currentPhoto}"
+                alt="Photo Preview"
+            >
+
+        `;
+
+    }
+
+    else{
+
+        preview.innerHTML =
+            "No Photo";
+
+    }
+
+}
+
+
+/* =====================================================
+   VIEW PROFILE
+===================================================== */
+
+function viewProfile(id){
+
+    const profile =
+        profiles.find(
+            p =>
+                p.id === id
+        );
+
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    let teacherName =
+        "Not assigned";
+
+
+    if(profile.teacherId){
+
+        const teacher =
+            profiles.find(
+                p =>
+                    p.id ===
+                    profile.teacherId
+            );
+
+
+        if(teacher){
+
+            teacherName =
+                teacher.name;
+
+        }
+
+    }
+
+
+    const firstLetter =
+        (profile.name || "?")
+            .charAt(0)
+            .toUpperCase();
+
+
+    const avatar =
+        profile.photo
+
+        ?
+
+        `<img
+            src="${profile.photo}"
+            alt="Profile Photo"
+        >`
+
+        :
+
+        escapeHTML(firstLetter);
+
+
+    document
+        .getElementById(
+            "viewContent"
+        )
+        .innerHTML = `
+
+            <div class="view-top">
+
+                <div class="view-avatar">
+
+                    ${avatar}
+
+                </div>
+
+                <h2>
+                    ${escapeHTML(
+                        profile.name ||
+                        "Unnamed"
+                    )}
+                </h2>
+
+                <p>
+
+                    ${
+                        profile.type === "teacher"
+                        ? "Teacher"
+                        : "Learner"
+                    }
+
+                </p>
+
+            </div>
+
+
+            <div class="details">
+
+                ${detail(
+                    "Section",
+                    profile.section
+                )}
+
+                ${detail(
+                    "Year / Grade",
+                    profile.year
+                )}
+
+                ${detail(
+                    "Emergency Number",
+                    profile.emergency
+                )}
+
+                ${detail(
+                    "LRN Number",
+                    profile.lrn
+                )}
+
+                ${detail(
+                    "School",
+                    profile.school
+                )}
+
+                ${detail(
+                    "Age",
+                    profile.age
+                )}
+
+                ${detail(
+                    "Email",
+                    profile.email
+                )}
+
+
+                ${
+                    profile.type === "learner"
+
+                    ?
+
+                    detail(
+                        "Assigned Teacher",
+                        teacherName
+                    )
+
+                    : ""
+
+                }
+
+
+                ${detail(
+                    "Additional Information",
+                    profile.notes
+                )}
+
+            </div>
+
+
+            <div
+                class="modal-buttons"
+                style="margin-top:20px"
+            >
+
+                <button
+                    class="primary-btn"
+                    onclick="printProfile('${profile.id}')"
+                >
+                    🖨️ Print
+                </button>
+
+                ${
+                    profile.type === "teacher"
+
+                    ?
+
+                    `<button
+                        class="purple-btn"
+                        onclick="viewTeacherLearners('${profile.id}')"
+                    >
+                        👨‍🎓 View Learners
+                    </button>`
+
+                    : ""
+
+                }
+
+            </div>
+
+        `;
+
+
+    openModal(
+        "viewModal"
+    );
+
+}
+
+
+function detail(label,value){
+
+    return `
+
+        <div class="detail">
+
+            <span class="detail-label">
+
+                ${escapeHTML(label)}
+
+            </span>
+
+            <span class="detail-value">
+
+                ${escapeHTML(
+                    value ||
+                    "N/A"
+                )}
+
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   TEACHER → LEARNERS
+===================================================== */
+
+function viewTeacherLearners(
+    teacherId
+){
+
+    const teacher =
+        profiles.find(
+            p =>
+                p.id === teacherId
+        );
+
+
+    if(!teacher){
+
+        return;
+
+    }
+
+
+    const learners =
+        profiles
+
+            .filter(
+                p =>
+                    p.type === "learner" &&
+                    p.teacherId === teacherId
+            )
+
+            .sort(
+                (a,b) =>
+                    (a.name || "")
+                    .localeCompare(
+                        b.name || ""
+                    )
+            );
+
+
+    let list = "";
+
+
+    if(!learners.length){
+
+        list = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    👨‍🎓
+                </div>
+
+                <h3>
+                    No assigned learners
+                </h3>
+
+                <p>
+                    This teacher currently has no assigned learners.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+    else{
+
+        list = `
+
+            <div class="learner-list">
+
+                ${
+                    learners
+                        .map(
+                            learner => `
+
+                                <div class="learner-item">
+
+                                    <div>
+
+                                        <strong>
+                                            ${escapeHTML(
+                                                learner.name
+                                            )}
+                                        </strong>
+
+                                        <small>
+
+                                            ${
+                                                escapeHTML(
+                                                    learner.section ||
+                                                    "No section"
+                                                )
+                                            }
+
+                                            •
+                                            ${
+                                                escapeHTML(
+                                                    learner.year ||
+                                                    "No year"
+                                                )
+                                            }
+
+                                        </small>
+
+                                    </div>
+
+                                    <button
+                                        class="primary-btn"
+                                        style="padding:7px 10px;font-size:10px"
+                                        onclick="viewProfile('${learner.id}')"
+                                    >
+                                        View
+                                    </button>
+
+                                </div>
+
+                            `
+                        )
+                        .join("")
+                }
+
+            </div>
+
+        `;
+
+    }
+
+
+    document
+        .getElementById(
+            "teacherLearnersContent"
+        )
+        .innerHTML = `
+
+            <div class="teacher-summary">
+
+                <h3>
+                    👨‍🏫 ${escapeHTML(
+                        teacher.name
+                    )}
+                </h3>
+
+                <p>
+                    ${learners.length}
+                    assigned learner(s)
+                </p>
+
+            </div>
+
+            ${list}
+
+        `;
+
+
+    closeModal("viewModal");
+
+    openModal(
+        "teacherLearnersModal"
+    );
+
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+function deleteProfile(id){
+
+    const profile =
+        profiles.find(
+            p =>
+                p.id === id
+        );
+
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            `Delete "${profile.name}"?`
+        )
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Save deleted profile temporarily
+        for Undo.
+    */
+
+    const deletedProfile =
+        JSON.parse(
+            JSON.stringify(profile)
+        );
+
+
+    const deletedIndex =
+        profiles.findIndex(
+            p =>
+                p.id === id
+        );
+
+
+    if(profile.type === "teacher"){
+
+        profiles.forEach(
+            learner => {
+
+                if(
+                    learner.teacherId === id
+                ){
+
+                    learner.teacherId =
+                        "";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    profiles =
+        profiles.filter(
+            p =>
+                p.id !== id
+        );
+
+
+    saveProfiles();
+
+    loadFilters();
+
+    updateStatistics();
+
+    renderProfiles();
+
+
+    addActivity(
+        `Deleted profile: ${profile.name}`
+    );
+
+
+    showUndoToast(
+        `"${profile.name}" deleted.`,
+        () => {
+
+            profiles.splice(
+                deletedIndex,
+                0,
+                deletedProfile
+            );
+
+
+            saveProfiles();
+
+            loadFilters();
+
+            updateStatistics();
+
+            renderProfiles();
+
+
+            addActivity(
+                `Restored profile: ${deletedProfile.name}`
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   UNDO TOAST
+===================================================== */
+
+function showUndoToast(
+    message,
+    undoFunction
+){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.innerHTML = `
+
+        ${escapeHTML(message)}
+
+        <button
+            id="undoButton"
+            style="
+                margin-left:10px;
+                background:white;
+                color:#222;
+                border-radius:6px;
+                padding:5px 9px;
+                font-weight:600;
+                font-size:10px;
+            "
+        >
+            Undo
+        </button>
+
+    `;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    document
+        .getElementById(
+            "undoButton"
+        )
+        .onclick =
+            () => {
+
+                undoFunction();
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            };
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        5000
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT TEACHER LEARNERS
+===================================================== */
+
+function exportTeacherLearners(
+    teacherId
+){
+
+    const teacher =
+        profiles.find(
+            p =>
+                p.id ===
+                teacherId
+        );
+
+
+    if(!teacher){
+
+        return;
+
+    }
+
+
+    const learners =
+        profiles
+
+            .filter(
+                p =>
+                    p.type === "learner" &&
+                    p.teacherId === teacherId
+            )
+
+            .sort(
+                (a,b) =>
+                    (a.name || "")
+                    .localeCompare(
+                        b.name || ""
+                    )
+            );
+
+
+    if(!learners.length){
+
+        showToast(
+            "This teacher has no assigned learners."
+        );
+
+        return;
+
+    }
+
+
+    const rows = [
+
+        [
+            "Name",
+            "Section",
+            "Year",
+            "Emergency Number",
+            "LRN Number",
+            "School",
+            "Age",
+            "Email",
+            "Assigned Teacher"
+        ]
+
+    ];
+
+
+    learners.forEach(
+        learner => {
+
+            rows.push([
+
+                learner.name || "",
+
+                learner.section || "",
+
+                learner.year || "",
+
+                learner.emergency || "",
+
+                learner.lrn || "",
+
+                learner.school || "",
+
+                learner.age || "",
+
+                learner.email || "",
+
+                teacher.name || ""
+
+            ]);
+
+        }
+    );
+
+
+    downloadCSV(
+
+        rows,
+
+        sanitize(
+            teacher.name
+        ) +
+        "_Learners.csv"
+
+    );
+
+
+    addActivity(
+        `Exported learners of ${teacher.name}`
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT ALL LEARNERS
+===================================================== */
+
+function exportAllLearners(){
+
+    const learners =
+        profiles
+
+            .filter(
+                p =>
+                    p.type === "learner"
+            )
+
+            .sort(
+                (a,b) =>
+                    (a.name || "")
+                    .localeCompare(
+                        b.name || ""
+                    )
+            );
+
+
+    if(!learners.length){
+
+        showToast(
+            "No learners available."
+        );
+
+        return;
+
+    }
+
+
+    const rows = [
+
+        [
+            "Name",
+            "Section",
+            "Year",
+            "Emergency Number",
+            "LRN Number",
+            "School",
+            "Age",
+            "Email",
+            "Assigned Teacher"
+        ]
+
+    ];
+
+
+    learners.forEach(
+        learner => {
+
+            const teacher =
+                profiles.find(
+                    p =>
+                        p.id ===
+                        learner.teacherId
+                );
+
+
+            rows.push([
+
+                learner.name || "",
+
+                learner.section || "",
+
+                learner.year || "",
+
+                learner.emergency || "",
+
+                learner.lrn || "",
+
+                learner.school || "",
+
+                learner.age || "",
+
+                learner.email || "",
+
+                teacher
+                    ? teacher.name
+                    : ""
+
+            ]);
+
+        }
+    );
+
+
+    downloadCSV(
+        rows,
+        "All_Learners.csv"
+    );
+
+
+    addActivity(
+        "Exported all learners"
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT ALL PROFILES
+===================================================== */
+
+function exportAllProfiles(){
+
+    if(!profiles.length){
+
+        showToast(
+            "No profiles available."
+        );
+
+        return;
+
+    }
+
+
+    const rows = [
+
+        [
+            "Profile Type",
+            "Name",
+            "Section",
+            "Year",
+            "Emergency Number",
+            "LRN Number",
+            "School",
+            "Age",
+            "Email",
+            "Assigned Teacher",
+            "Additional Information"
+        ]
+
+    ];
+
+
+    profiles.forEach(
+        profile => {
+
+            const teacher =
+                profiles.find(
+                    p =>
+                        p.id ===
+                        profile.teacherId
+                );
+
+
+            rows.push([
+
+                profile.type || "",
+
+                profile.name || "",
+
+                profile.section || "",
+
+                profile.year || "",
+
+                profile.emergency || "",
+
+                profile.lrn || "",
+
+                profile.school || "",
+
+                profile.age || "",
+
+                profile.email || "",
+
+                teacher
+                    ? teacher.name
+                    : "",
+
+                profile.notes || ""
+
+            ]);
+
+        }
+    );
+
+
+    downloadCSV(
+        rows,
+        "All_Profiles.csv"
+    );
+
+
+    addActivity(
+        "Exported all profiles"
+    );
+
+}
+
+
+/* =====================================================
+   CSV DOWNLOAD
+===================================================== */
+
+function downloadCSV(
+    rows,
+    filename
+){
+
+    const csv =
+        rows
+
+            .map(
+                row =>
+                    row
+
+                        .map(
+                            value =>
+                                `"${String(value)
+                                    .replace(
+                                        /"/g,
+                                        '""'
+                                    )}"`
+                        )
+
+                        .join(",")
+            )
+
+            .join("\n");
+
+
+    const blob =
+        new Blob(
+            [
+                "\ufeff" +
+                csv
+            ],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        filename;
+
+
+    document
+        .body
+        .appendChild(
+            link
+        );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    showToast(
+        "CSV exported successfully."
+    );
+
+}
+
+
+/* =====================================================
+   CSV IMPORT
+===================================================== */
+
+function importCSV(event){
+
+    const file =
+        event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e){
+
+            try{
+
+                const lines =
+                    parseCSV(
+                        e.target.result
+                    );
+
+
+                if(lines.length < 2){
+
+                    showToast(
+                        "CSV file is empty."
+                    );
+
+                    return;
+
+                }
+
+
+                const headers =
+                    lines[0]
+                        .map(
+                            h =>
+                                h
+                                    .trim()
+                                    .toLowerCase()
+                        );
+
+
+                let imported = 0;
+
+
+                for(
+                    let i = 1;
+                    i < lines.length;
+                    i++
+                ){
+
+                    const row =
+                        lines[i];
+
+
+                    if(
+                        !row.length ||
+                        !row.join("").trim()
+                    ){
+
+                        continue;
+
+                    }
+
+
+                    const get =
+                        name => {
+
+                            const index =
+                                headers.indexOf(
+                                    name
+                                );
+
+                            return index >= 0
+                                ? row[index] || ""
+                                : "";
+
+                        };
+
+
+                    const type =
+                        get("profile type")
+                        .toLowerCase();
+
+
+                    const profileType =
+                        type === "teacher"
+                        ? "teacher"
+                        : "learner";
+
+
+                    const teacherName =
+                        get(
+                            "assigned teacher"
+                        );
+
+
+                    let teacherId = "";
+
+
+                    if(
+                        teacherName
+                    ){
+
+                        const teacher =
+                            profiles.find(
+                                p =>
+                                    p.type === "teacher" &&
+                                    p.name
+                                        .toLowerCase() ===
+                                    teacherName
+                                        .toLowerCase()
+                            );
+
+
+                        if(teacher){
+
+                            teacherId =
+                                teacher.id;
+
+                        }
+
+                    }
+
+
+                    const profile = {
+
+                        id:
+                            Date.now()
+                            .toString() +
+                            "_" +
+                            i,
+
+                        type:
+                            profileType,
+
+                        name:
+                            get("name"),
+
+                        section:
+                            get("section"),
+
+                        year:
+                            get("year"),
+
+                        emergency:
+                            get("emergency number"),
+
+                        lrn:
+                            get("lrn number"),
+
+                        school:
+                            get("school"),
+
+                        age:
+                            get("age"),
+
+                        email:
+                            get("email"),
+
+                        teacherId:
+                            profileType === "learner"
+                            ? teacherId
+                            : "",
+
+                        notes:
+                            get(
+                                "additional information"
+                            ),
+
+                        photo:"",
+
+                        createdAt:
+                            new Date()
+                                .toISOString(),
+
+                        updatedAt:
+                            new Date()
+                                .toISOString()
+
+                    };
+
+
+                    if(profile.name){
+
+                        profiles.push(
+                            profile
+                        );
+
+                        imported++;
+
+                    }
+
+                }
+
+
+                saveProfiles();
+
+                loadFilters();
+
+                updateStatistics();
+
+                renderProfiles();
+
+
+                addActivity(
+                    `Imported ${imported} profile(s) from CSV`
+                );
+
+
+                showToast(
+                    `${imported} profile(s) imported successfully.`
+                );
+
+            }
+
+            catch(error){
+
+                showToast(
+                    "Unable to read CSV file."
+                );
+
+            }
+
+            event.target.value = "";
+
+        };
+
+
+    reader.readAsText(file);
+
+}
+
+
+/* =====================================================
+   CSV PARSER
+===================================================== */
+
+function parseCSV(text){
+
+    const rows = [];
+
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+
+    for(
+        let i = 0;
+        i < text.length;
+        i++
+    ){
+
+        const char =
+            text[i];
+
+
+        const next =
+            text[i + 1];
+
+
+        if(
+            char === '"' &&
+            insideQuotes &&
+            next === '"'
+        ){
+
+            value += '"';
+
+            i++;
+
+            continue;
+
+        }
+
+
+        if(char === '"'){
+
+            insideQuotes =
+                !insideQuotes;
+
+            continue;
+
+        }
+
+
+        if(
+            char === "," &&
+            !insideQuotes
+        ){
+
+            row.push(value);
+
+            value = "";
+
+            continue;
+
+        }
+
+
+        if(
+            (char === "\n" ||
+             char === "\r") &&
+            !insideQuotes
+        ){
+
+            if(
+                char === "\r" &&
+                next === "\n"
+            ){
+
+                i++;
+
+            }
+
+
+            row.push(value);
+
+            rows.push(row);
+
+            row = [];
+
+            value = "";
+
+            continue;
+
+        }
+
+
+        value += char;
+
+    }
+
+
+    if(
+        value.length ||
+        row.length
+    ){
+
+        row.push(value);
+
+        rows.push(row);
+
+    }
+
+
+    return rows;
+
+}
+
+
+/* =====================================================
+   BACKUP
+===================================================== */
+
+function backupData(){
+
+    const data = {
+
+        version:"2.0",
+
+        profiles:profiles,
+
+        account:
+            JSON.parse(
+                localStorage.getItem(
+                    ACCOUNT_KEY
+                )
+            ),
+
+        activity:
+            getActivities(),
+
+        darkMode:
+            localStorage.getItem(
+                DARK_KEY
+            ) === "true",
+
+        backupDate:
+            new Date().toISOString()
+
+    };
+
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "Profile_Search_Backup_" +
+        new Date()
+            .toISOString()
+            .slice(0,10) +
+        ".json";
+
+
+    document
+        .body
+        .appendChild(
+            link
+        );
+
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    addActivity(
+        "Created data backup"
+    );
+
+
+    showToast(
+        "Backup created successfully."
+    );
+
+}
+
+
+/* =====================================================
+   RESTORE
+===================================================== */
+
+function restoreData(event){
+
+    const file =
+        event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            "Restore this backup? Current profiles will be replaced."
+        )
+    ){
+
+        event.target.value = "";
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e){
+
+            try{
+
+                const data =
+                    JSON.parse(
+                        e.target.result
+                    );
+
+
+                if(
+                    !Array.isArray(
+                        data.profiles
+                    )
+                ){
+
+                    throw new Error(
+                        "Invalid backup"
+                    );
+
+                }
+
+
+                profiles =
+                    data.profiles;
+
+
+                saveProfiles();
+
+
+                if(data.account){
+
+                    localStorage.setItem(
+
+                        ACCOUNT_KEY,
+
+                        JSON.stringify(
+                            data.account
+                        )
+
+                    );
+
+                }
+
+
+                if(
+                    Array.isArray(
+                        data.activity
+                    )
+                ){
+
+                    localStorage.setItem(
+
+                        ACTIVITY_KEY,
+
+                        JSON.stringify(
+                            data.activity
+                        )
+
+                    );
+
+                }
+
+
+                if(
+                    data.darkMode
+                ){
+
+                    document
+                        .body
+                        .classList
+                        .add("dark");
+
+                    localStorage.setItem(
+                        DARK_KEY,
+                        "true"
+                    );
+
+                }
+
+                else{
+
+                    document
+                        .body
+                        .classList
+                        .remove("dark");
+
+                    localStorage.setItem(
+                        DARK_KEY,
+                        "false"
+                    );
+
+                }
+
+
+                loadFilters();
+
+                updateStatistics();
+
+                renderProfiles();
+
+
+                showToast(
+                    "Backup restored successfully."
+                );
+
+            }
+
+            catch(error){
+
+                showToast(
+                    "Invalid backup file."
+                );
+
+            }
+
+
+            event.target.value = "";
+
+        };
+
+
+    reader.readAsText(file);
+
+}
+
+
+/* =====================================================
+   CLEAR ALL
+===================================================== */
+
+function clearAllProfiles(){
+
+    if(!profiles.length){
+
+        showToast(
+            "There are no profiles to clear."
+        );
+
+        return;
+
+    }
+
+
+    const confirmation =
+        confirm(
+            "Are you sure you want to delete ALL profiles? Create a backup first if needed."
+        );
+
+
+    if(!confirmation){
+
+        return;
+
+    }
+
+
+    profiles = [];
+
+    saveProfiles();
+
+    loadFilters();
+
+    updateStatistics();
+
+    renderProfiles();
+
+
+    addActivity(
+        "Cleared all profiles"
+    );
+
+
+    showToast(
+        "All profiles have been cleared."
+    );
+
+}
+
+
+/* =====================================================
+   ACTIVITY LOG
+===================================================== */
+
+function getActivities(){
+
+    const saved =
+        localStorage.getItem(
+            ACTIVITY_KEY
+        );
+
+
+    if(!saved){
+
+        return [];
+
+    }
+
+
+    try{
+
+        return JSON.parse(
+            saved
+        );
+
+    }
+
+    catch{
+
+        return [];
+
+    }
+
+}
+
+
+function addActivity(action){
+
+    const activities =
+        getActivities();
+
+
+    activities.unshift({
+
+        action:action,
+
+        date:
+            new Date()
+                .toLocaleString()
+
+    });
+
+
+    const limited =
+        activities.slice(
+            0,
+            100
+        );
+
+
+    localStorage.setItem(
+
+        ACTIVITY_KEY,
+
+        JSON.stringify(
+            limited
+        )
+
+    );
+
+}
+
+
+function openActivityLog(){
+
+    const activities =
+        getActivities();
+
+
+    const list =
+        document.getElementById(
+            "activityList"
+        );
+
+
+    if(!activities.length){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📝
+                </div>
+
+                <h3>
+                    No activity yet
+                </h3>
+
+            </div>
+
+        `;
+
+    }
+
+    else{
+
+        list.innerHTML =
+            activities
+                .map(
+                    item => `
+
+                        <div class="activity-item">
+
+                            <strong>
+                                ${escapeHTML(
+                                    item.action
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(
+                                    item.date
+                                )}
+                            </small>
+
+                        </div>
+
+                    `
+                )
+                .join("");
+
+    }
+
+
+    openModal(
+        "activityModal"
+    );
+
+}
+
+
+/* =====================================================
+   PRINT PROFILE
+===================================================== */
+
+function printProfile(id){
+
+    const profile =
+        profiles.find(
+            p =>
+                p.id === id
+        );
+
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    const teacher =
+        profiles.find(
+            p =>
+                p.id ===
+                profile.teacherId
+        );
+
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank",
+            "width=700,height=800"
+        );
+
+
+    const photo =
+        profile.photo
+
+        ?
+
+        `<img
+            src="${profile.photo}"
+            style="
+                width:110px;
+                height:110px;
+                object-fit:cover;
+                border-radius:50%;
+            "
+        >`
+
+        :
+
+        `<div
+            style="
+                width:110px;
+                height:110px;
+                border-radius:50%;
+                background:#1877f2;
+                color:white;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:40px;
+                font-weight:bold;
+                margin:auto;
+            "
+        >
+            ${escapeHTML(
+                (profile.name || "?")
+                    .charAt(0)
+                    .toUpperCase()
+            )}
+        </div>`;
+
+
+    printWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>
+                ${escapeHTML(
+                    profile.name
+                )}
+            </title>
+
+            <style>
+
+                body{
+                    font-family:Arial,sans-serif;
+                    padding:40px;
+                    color:#222;
+                }
+
+                .card{
+                    max-width:600px;
+                    margin:auto;
+                    border:1px solid #ddd;
+                    border-radius:15px;
+                    padding:30px;
+                }
+
+                .header{
+                    text-align:center;
+                    margin-bottom:25px;
+                }
+
+                h1{
+                    font-size:24px;
+                    margin:12px 0 5px;
+                }
+
+                .role{
+                    color:#1877f2;
+                    font-weight:bold;
+                    font-size:13px;
+                }
+
+                .detail{
+                    display:flex;
+                    justify-content:space-between;
+                    padding:10px 0;
+                    border-bottom:1px solid #eee;
+                }
+
+                .label{
+                    color:#777;
+                    font-weight:bold;
+                }
+
+                .value{
+                    text-align:right;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <div class="card">
+
+                <div class="header">
+
+                    ${photo}
+
+                    <h1>
+                        ${escapeHTML(
+                            profile.name
+                        )}
+                    </h1>
+
+                    <div class="role">
+                        ${
+                            profile.type === "teacher"
+                            ? "TEACHER"
+                            : "LEARNER"
+                        }
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        Section
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.section || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        Year / Grade
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.year || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        Emergency Number
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.emergency || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        LRN Number
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.lrn || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        School
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.school || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        Age
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.age || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="label">
+                        Email
+                    </span>
+
+                    <span class="value">
+                        ${escapeHTML(
+                            profile.email || "N/A"
+                        )}
+                    </span>
+                </div>
+
+
+                ${
+                    profile.type === "learner"
+
+                    ?
+
+                    `<div class="detail">
+
+                        <span class="label">
+                            Assigned Teacher
+                        </span>
+
+                        <span class="value">
+                            ${escapeHTML(
+                                teacher
+                                ? teacher.name
+                                : "Not assigned"
+                            )}
+                        </span>
+
+                    </div>`
+
+                    : ""
+
+                }
+
+            </div>
+
+            <script>
+
+                window.onload =
+                    function(){
+
+                        window.print();
+
+                    };
+
+            <\/script>
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    printWindow.document.close();
+
+
+    addActivity(
+        `Printed profile: ${profile.name}`
+    );
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function openSettings(){
+
+    document
+        .getElementById(
+            "drawer"
+        )
+        .classList
+        .add("open");
+
+
+    document
+        .getElementById(
+            "overlay"
+        )
+        .classList
+        .add("show");
+
+}
+
+
+function closeSettings(){
+
+    document
+        .getElementById(
+            "drawer"
+        )
+        .classList
+        .remove("open");
+
+
+    document
+        .getElementById(
+            "overlay"
+        )
+        .classList
+        .remove("show");
+
+}
+
+
+/* =====================================================
+   PASSWORD MODAL
+===================================================== */
+
+function openPasswordModal(){
+
+    closeSettings();
+
+    openModal(
+        "passwordModal"
+    );
+
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+function toggleDarkMode(){
+
+    document
+        .body
+        .classList
+        .toggle("dark");
+
+
+    localStorage.setItem(
+
+        DARK_KEY,
+
+        document
+            .body
+            .classList
+            .contains("dark")
+
+        ? "true"
+        : "false"
+
+    );
+
+}
+
+
+function loadDarkMode(){
+
+    if(
+        localStorage.getItem(
+            DARK_KEY
+        ) === "true"
+    ){
+
+        document
+            .body
+            .classList
+            .add("dark");
+
+    }
+
+}
+
+
+/* =====================================================
+   MODALS
+===================================================== */
+
+function openModal(id){
+
+    document
+        .getElementById(id)
+        .classList
+        .add("show");
+
+}
+
+
+function closeModal(id){
+
+    document
+        .getElementById(id)
+        .classList
+        .remove("show");
+
+}
+
+
+/* =====================================================
+   CLEAR FORM
+===================================================== */
+
+function clearForm(){
+
+    [
+
+        "name",
+        "section",
+        "year",
+        "emergency",
+        "lrn",
+        "school",
+        "age",
+        "email",
+        "notes"
+
+    ].forEach(
+        id => {
+
+            document
+                .getElementById(id)
+                .value = "";
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "teacherId"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "photoInput"
+        )
+        .value = "";
+
+}
+
+
+/* =====================================================
+   PASSWORD EYE
+===================================================== */
+
+function togglePassword(id){
+
+    const input =
+        document
+            .getElementById(id);
+
+
+    input.type =
+        input.type === "password"
+        ? "text"
+        : "password";
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message){
+
+    const toast =
+        document
+            .getElementById(
+                "toast"
+            );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        3000
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   FILENAME
+===================================================== */
+
+function sanitize(name){
+
+    return String(
+        name ||
+        "Teacher"
+    )
+    .replace(
+        /[^a-z0-9_-]/gi,
+        "_"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE MODALS OUTSIDE
+===================================================== */
+
+document
+    .querySelectorAll(".modal")
+    .forEach(
+        modal => {
+
+            modal.addEventListener(
+                "click",
+                event => {
+
+                    if(
+                        event.target ===
+                        modal
+                    ){
+
+                        modal.classList.remove(
+                            "show"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   ENTER LOGIN
+===================================================== */
+
+document
+    .getElementById(
+        "loginPassword"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key === "Enter"
+            ){
+
+                login();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   INITIAL FILTER STATE
+===================================================== */
+
+document
+    .getElementById(
+        "assignmentFilter"
+    )
+    .style
+    .display = "none";
+
+</script>
+
+</body>
+</html>
